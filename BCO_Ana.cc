@@ -40,7 +40,7 @@ void BCO_Ana::ShowProgress(std::size_t const& p, std::size_t const& P)
     }
     printf("]\t");
 
-    printf("%0.2fs (ETA %0.2fs)", current_time, current_time * P / p);
+    printf("%0.2fs (ETA %0.2fs)%8s", current_time, current_time * P / p, " ");
     fflush(stdout);
 }
 
@@ -119,8 +119,9 @@ int BCO_Ana::ReadFile(std::string const& file_name, std::string const& tree_name
     }
 
     int bco = 0;
-    tree->SetBranchAddress(bco_branch_name.c_str(), &bco);
     Long64_t bco_full = 0;
+
+    tree->SetBranchAddress(bco_branch_name.c_str(), &bco);
     tree->SetBranchAddress(bco_full_branch_name.c_str(), &bco_full);
 
     Long64_t bco_hit = 0;
@@ -145,6 +146,7 @@ int BCO_Ana::ReadFile(std::string const& file_name, std::string const& tree_name
             bco_hits[bco_hit] = (struct BCO_s){.bco = bco, .bco_full = bco_full, .hits = 0};
         }
         ++(bco_hits[bco_hit].hits);
+        ++(bco_arr[bco % 128]);
 
         ShowProgress(n, tree->GetEntriesFast());
     }
@@ -189,7 +191,9 @@ int BCO_Ana::WriteFile(std::string const& file_dir, std::string const& tree_name
 
     int bco;
     Long64_t bco_full;
-    Long64_t hits;
+    Long64_t bco_combined;
+    Long64_t hits_v_bco_combined;
+    Long64_t hits_v_bco;
     TTree* tree = nullptr;
     Map_t::const_iterator itr;
     
@@ -197,14 +201,19 @@ int BCO_Ana::WriteFile(std::string const& file_dir, std::string const& tree_name
     tree->SetDirectory(file);
     tree->Branch("bco", &bco);
     tree->Branch("bco_full", &bco_full);
-    tree->Branch("hits", &hits);
+    tree->Branch("bco_combined", &bco_combined);
+    tree->Branch("hits_v_bco_combined", &hits_v_bco_combined);
+    tree->Branch("hits_v_bco", &hits_v_bco);
 
     InitProgress();
     for(itr = bco_hits.begin(); itr != bco_hits.end(); ++itr)
     {
         bco = itr->second.bco;
         bco_full = itr->second.bco_full;
-        hits = itr->second.hits;
+        bco_combined = itr->first;
+
+        hits_v_bco_combined = itr->second.hits;
+        hits_v_bco = bco_arr[bco % 128];
 
         tree->Fill();
 

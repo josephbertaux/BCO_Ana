@@ -35,6 +35,7 @@ protected:
     };
     typedef std::map<Long64_t, struct BCO_s> Map_t;
     Map_t bco_hits;
+    Long64_t bco_arr[128] = {0};
 
 public:
     BCO_Ana();
