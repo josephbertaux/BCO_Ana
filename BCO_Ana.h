@@ -18,8 +18,17 @@
 class BCO_Ana
 {
 protected:
+    const static std::size_t FLX = 8;
+    const static std::size_t CHN = 14;
+    const static std::size_t CHP = 26;
+
+    const static std::size_t BCO = 128;
+
     std::string bco_branch_name = "bco";
     std::string bco_full_branch_name = "bco_full";
+    std::string flx_branch_name = "pid";
+    std::string chn_branch_name = "module";
+    std::string chp_branch_name = "chip_id";
 
     std::size_t progress_bar_current;
     std::size_t progress_bar_width = 20;
@@ -34,8 +43,8 @@ protected:
         Long64_t hits;
     };
     typedef std::map<Long64_t, struct BCO_s> Map_t;
-    Map_t bco_hits;
-    Long64_t bco_arr[128] = {0};
+    Map_t bco_map[FLX][CHN][CHP];
+    Long64_t bco_arr[FLX][CHN][CHP][BCO] = {0};
 
 public:
     BCO_Ana();
