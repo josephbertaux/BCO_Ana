@@ -55,7 +55,7 @@ public:
     void ShowFinished();
 
     int ReadFile(std::string const&, std::string const& = "tree");
-    int WriteFile(std::string const& = "/home/phnxrc/INTT/commissioning_5_23/bco_files/", std::string const& = "tree");
+    int WriteFile(std::string const& = "/bbox/commissioning/INTT/hit_files/", std::string const& = "tree");
 };
 
 #endif//BCO_ANA_H

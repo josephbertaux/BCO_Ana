@@ -115,15 +115,17 @@ int BCO_Ana::ReadFile(std::string const& file_name, std::string const& tree_name
     {
         tree->GetEntry(n);
 
-        switch(is_offset)
-        {
-            case 0:
-                bco_hit = (bco_full & (Long64_t)0xffffffffffffff80) + (bco & 0x000000000000007f);
-                break;
-            default:
-                bco_hit = bco_full + bco;
-                break;
-        }
+        //switch(is_offset)
+        //{
+        //    case 0:
+        //        bco_hit = (bco_full & (Long64_t)0xffffffffffffff80) + (bco & 0x000000000000007f);
+        //        break;
+        //    default:
+        //        bco_hit = bco_full + bco;
+        //        break;
+        //}
+
+        bco_hit = bco_full;
 
         flx -= 3001;
         if(bco_map[flx][chn][chp].find(bco_hit) == bco_map[flx][chn][chp].end())
